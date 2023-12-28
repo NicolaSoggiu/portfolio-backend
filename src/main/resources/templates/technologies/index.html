@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/resources :: headResources('Technologies')"></head>
+<body>
+<nav th:replace="fragments/navbar :: topNavbar('technologies')"></nav>
+<div class="container">
+    <div th:replace="fragments/components :: message"></div>
+    <h1>Technologies</h1>
+    <section>
+        <form
+                id="technology-form"
+                th:action="@{/technologies}"
+                method="POST"
+                th:object="${technologyObj}"
+        >
+            <div class="mb-3"
+                 th:insert="fragments/components :: formField('text', 'Technology name', 'name')">
+            </div>
+            <button class="btn btn-primary" type="submit">Add technology</button>
+        </form>
+    </section>
+    <section th:if="${technologyList.size() > 0}" class="mt-4">
+        <ul class="list-group">
+            <li th:each="technology : ${technologyList}" class="d-flex justify-content-between list-group-item">
+                <span th:text="${technology.name}"></span>
+                <form method="POST" th:action="@{/technologies/delete/{id}(id=${technology.id})}"
+                      onsubmit="return confirm('Are you sure?')">
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-trash-can"></i></button>
+                </form>
+            </li>
+        </ul>
+    </section>
+</div>
+<div th:unless="${technologyList.size() > 0}" class="container mt-2"><h1>No technologies</h1></div>
+</body>
+</html>
